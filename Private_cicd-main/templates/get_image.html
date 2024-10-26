@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Gallery</title>
+</head>
+<body>
+    <h1>Image Gallery</h1>
+    {% for image_id in image_ids %}
+        <div>
+            <img src="{{ url_for('images', image_id=image_id) }}" alt="Image {{ loop.index }}" width="1000">
+        </div>
+    {% endfor %}
+</body>
+</html>

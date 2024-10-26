@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href=" {{ url_for('static', filename='css/main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3조 프로젝트 온프레미스</title>
+</head>
+<body>
+    <header>
+        <div id="header">
+            <img src="/static/logo.png" alt="로고" />
+            <ul id="user-links">
+                {% if session.get("user_info") %}
+                {% if session["user_info"].get("customer_type") == "seller" %}
+                    <a href="/logout" id="logout">로그아웃</a> |
+                    <a href="/cart">장바구니</a> |
+                    <a href="/register_product">상품등록</a>
+                {% elif session["user_info"].get("customer_type") == "buyer" %}
+                    <a href="/logout" id="logout">로그아웃</a> |
+                    <a href="/cart">장바구니</a> |
+                    <a href="/mypape">마이페이지</a>
+                {% endif %}
+                {% else %}
+                    <a href="/register">회원가입</a> |
+                    <a href="/login">로그인</a>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+    <article>
+        <div id="article">
+            <div id="banner">
+                <img src="/static/banner1.png" alt="배너" />
+            </div>
+            <div id="product-list">
+                {% for product in products %}
+                        <div class="product-card">
+                            <div>
+                                <img class="product-img" src="/image/{{ product.image_id }}" alt="상품 {{ product.id }}" />
+                            </div>
+                            <div class="product-contents">
+                                <span class="product-name">{{ product.name }}</span>
+                                <div class="price-container">
+                                    <span class="original-price">{{ product.price }}</span>
+                                    <span class="product-price">1</span>
+                                </div>
+                                <div class="product-seller">
+                                    <a href="/product/{{ product.id }}" class="product-detail">
+                                        <img src="/static/zoom-in.svg" alt="제품 상세 아이콘" />
+                                        제품 상세
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                {% endfor %}
+            </div>
+        </div>
+    </article>
+  
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+            {% for category, message in messages %}
+                <script>
+                    alert("{{ message }}");
+                </script>
+            {% endfor %}
+    {% endif %}
+{% endwith %}
+</body>
+</html>
+
+
+
+
+

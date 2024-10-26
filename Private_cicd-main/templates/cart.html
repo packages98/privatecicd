@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+        }
+        header img {
+            height: 40px;
+        }
+        #user-links {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        #user-links a {
+            color: black;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        #user-links a:hover {
+            text-decoration: underline;
+        }
+        .cart-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .cart-header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        td img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+        .total-row {
+            font-weight: bold;
+        }
+        .checkout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .checkout-button:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/"><img src="/static/logo.png" alt="홈으로" /></a>
+        <ul id="user-links">
+            {% if session["user_info"] %}
+                <a href="/logout" id="logout">로그아웃</a> |
+            {% else %}
+                <a href="/register">회원가입</a> |
+                <a href="/login">로그인</a>
+            {% endif %}
+        </ul>
+    </header>
+    <div class="cart-container">
+        <div class="cart-header">
+            <h1>장바구니</h1>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>IMAGE</th>
+                    <th>ITEM</th>
+                    <th>수량</th>
+                    <th>PRICE</th>
+                    <th>REMOVE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in carts_list %}
+                <tr>
+                    <td><img src="/image/{{ item.image_id }}" alt="{{ item.name }}"></td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>₩ {{ item.price }}</td>
+                    <td>
+                        <form method="post" action="/remove_item">
+                            <input type="hidden" name="item_id" id="item_id" value="{{ item._id }}">
+                            <button type="submit">삭제</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="total-row">총 금액</td>
+                    <td class="total-row">₩ {{ total_price }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        <form method="post" action="/pay">
+            <button type="submit" class="checkout-button">결제하기</button>
+        </form>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+            {% for category, message in messages %}
+                <script>
+                    alert("{{ message }}");
+                </script>
+            {% endfor %}
+    {% endif %}
+{% endwith %}
+</body>
+</html>

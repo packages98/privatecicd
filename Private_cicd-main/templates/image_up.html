@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+    <h1>Upload an Image with Product Details</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="name">제품이름:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="explanation">제품설명:</label><br>
+        <input type="text" id="explanation" name="explanation" required><br><br>
+
+        <label for="origin">원산지:</label><br>
+        <input type="text" id="origin" name="origin" required><br><br>
+        
+        <label for="price">가격:</label><br>
+        <input type="text" id="price" name="price" required><br><br>
+
+        <label for="price">갯수:</label><br>
+        <input type="text" id="stock" name="stock" required><br><br>
+
+        
+        <label for="image">Choose an image to upload:</label><br>
+        <input type="file" id="image" name="image" accept="image/*" required><br><br>
+        
+        <input type="submit" value="Upload Image">
+    </form>
+</body>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                    {% for category, message in messages %}
+                        <script>
+                            alert("{{ message }}");
+                        </script>
+                    {% endfor %}
+            {% endif %}
+        {% endwith %}
+</html>

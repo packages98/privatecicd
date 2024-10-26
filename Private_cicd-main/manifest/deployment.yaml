@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskapp
+  labels:
+    app: flaskapp
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: flaskapp
+  template:
+    metadata:
+      labels:
+        app: flaskapp
+    spec:
+      containers:
+      - name: nginx
+        image: Harbor/project/nginx:27
+        resources:
+          request:
+            cpu: 500m
+            memory: 300Mi
+          limits:
+            cpu: 1
+            memory: 500Mi
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet: 
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 5
+      - name: flaskapp
+        image: Harbor/project/flaskapp:27
+        resources:
+          request:
+            cpu: 1
+            memory: 300Mi
+          limits:
+            cpu: 2
+            memory: 500Mi
+        ports: 
+        - containerPort: 8000
+      imagePullSecrets:
+      - name: harbor

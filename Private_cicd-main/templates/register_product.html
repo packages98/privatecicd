@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boxed Table</title>
+    <style>
+        p {width: 120px;}
+        table {
+            border-collapse: collapse; /* 테두리가 겹치지 않게 설정 */
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: Arial, sans-serif;
+            table-layout: fixed; /* 고정 레이아웃 설정 */
+        }
+
+        th, td {
+            border: 1px solid #ddd; /* 테두리 설정 */
+            padding: 8px; /* 패딩 설정 */
+            text-align: left;
+            height: 70px;
+            background-color: #ffffff; /* 배경색 설정 */
+        }
+        .description-box {display: flex; align-items: center;}
+
+        th {
+            background-color: #f2f2f2; /* 헤더 배경색 설정 */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* 짝수 행 배경색 설정 */
+        }
+
+        tr:hover {
+            background-color: #f1f1f1; /* 마우스 오버 시 배경색 설정 */
+        }
+
+        .table-container {
+            border: 1px solid #ddd; /* 테두리 설정 */
+            padding: 20px; /* 패딩 설정 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 설정 */
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .image-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            background-color: #ffffff;
+            
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        td.image-box {
+            width: 50%; /* 폭 설정 */
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%; /* 너비 설정 */
+            padding: 6px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .nav-links a {
+            color: black;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        input[type="number"] {
+            width: 100%; /* 고정 너비 설정 */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/"><img src="onof.png" alt="홈으로" /></a>
+        <div class="nav-links">
+            {% if session["user_id"] %}
+                <a href="/logout" id="logout">로그아웃</a> |
+            {% else %}
+                <a href="/register">회원가입</a> |
+                <a href="/login">로그인</a>
+            {% endif %}
+        </div>
+    </header>
+    <div class="table-container">
+        <form action="/register_product" method="post" enctype="multipart/form-data">
+            <table>
+                <thead>
+                    <tr>
+                        <th>상품 이미지</th>
+                        <th>상품 설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="image-box">
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;" name="image" />
+                            <button type="button" onclick="document.getElementById('image-upload').click();">이미지 업로드</button>
+                        </td>
+                        <td>
+                            <div class="description-box">
+                                <p>상품 명:</p>
+                                <input type="text" id="product-name" name="name" />
+                            </div>
+                            <div class="description-box">
+                                <p>상품 설명:</p>
+                                <input type="text" id="explanation" name="explanation" />
+                            </div>
+                            <div class="description-box">
+                                <p>개수:</p>
+                                <input type="number" id="stock" name="stock"/>
+                            </div>
+                            <div class="description-box">
+                                <p>가격:</p>
+                                <input type="text" id="price" name="price"/>
+                            </div>
+                            <div class="description-box">
+                                <p>원산지:</p>
+                                <input type="text" id="origin" name="origin" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">
+                            <button type="submit">등록</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                    {% for category, message in messages %}
+                        <script>
+                            alert("{{ message }}");
+                        </script>
+                    {% endfor %}
+            {% endif %}
+        {% endwith %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
